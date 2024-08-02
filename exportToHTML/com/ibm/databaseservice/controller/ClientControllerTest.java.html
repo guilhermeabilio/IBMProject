@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>ClientControllerTest.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ClientControllerTest.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">ibm</span><span class="s2">.</span><span class="s1">databaseservice</span><span class="s2">.</span><span class="s1">controller</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">fasterxml</span><span class="s2">.</span><span class="s1">jackson</span><span class="s2">.</span><span class="s1">databind</span><span class="s2">.</span><span class="s1">ObjectMapper</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">ibm</span><span class="s2">.</span><span class="s1">databaseservice</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Client</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">ibm</span><span class="s2">.</span><span class="s1">databaseservice</span><span class="s2">.</span><span class="s1">service</span><span class="s2">.</span><span class="s1">ClientService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">junit</span><span class="s2">.</span><span class="s1">jupiter</span><span class="s2">.</span><span class="s1">api</span><span class="s2">.</span><span class="s1">BeforeEach</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">junit</span><span class="s2">.</span><span class="s1">jupiter</span><span class="s2">.</span><span class="s1">api</span><span class="s2">.</span><span class="s1">Test</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">mockito</span><span class="s2">.</span><span class="s1">InjectMocks</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">mockito</span><span class="s2">.</span><span class="s1">Mock</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">mockito</span><span class="s2">.</span><span class="s1">Mockito</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">mockito</span><span class="s2">.</span><span class="s1">MockitoAnnotations</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">beans</span><span class="s2">.</span><span class="s1">factory</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">Autowired</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">MediaType</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">test</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">MockMvc</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">test</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">setup</span><span class="s2">.</span><span class="s1">MockMvcBuilders</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Arrays</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Optional</span><span class="s2">;</span>
+
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">mockito</span><span class="s2">.</span><span class="s1">Mockito</span><span class="s2">.</span><span class="s1">when</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">test</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">request</span><span class="s2">.</span><span class="s1">MockMvcRequestBuilders</span><span class="s2">.*;</span>
+<span class="s0">import static </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">test</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">result</span><span class="s2">.</span><span class="s1">MockMvcResultMatchers</span><span class="s2">.*;</span>
+
+<span class="s0">public class </span><span class="s1">ClientControllerTest </span><span class="s2">{</span>
+
+    <span class="s1">@Mock</span>
+    <span class="s0">private </span><span class="s1">ClientService clientService</span><span class="s2">;</span>
+
+    <span class="s1">@InjectMocks</span>
+    <span class="s0">private </span><span class="s1">ClientController clientController</span><span class="s2">;</span>
+    <span class="s1">@Autowired</span>
+    <span class="s0">private </span><span class="s1">MockMvc mockMvc</span><span class="s2">;</span>
+
+    <span class="s0">private final </span><span class="s1">ObjectMapper objectMapper </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ObjectMapper</span><span class="s2">();</span>
+
+    <span class="s1">@BeforeEach</span>
+    <span class="s0">public void </span><span class="s1">setUp</span><span class="s2">() {</span>
+        <span class="s1">MockitoAnnotations</span><span class="s2">.</span><span class="s1">openMocks</span><span class="s2">(</span><span class="s0">this</span><span class="s2">);</span>
+        <span class="s1">mockMvc </span><span class="s2">= </span><span class="s1">MockMvcBuilders</span><span class="s2">.</span><span class="s1">standaloneSetup</span><span class="s2">(</span><span class="s1">clientController</span><span class="s2">).</span><span class="s1">build</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s0">public void </span><span class="s1">testGetAllClients</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">when</span><span class="s2">(</span><span class="s1">clientService</span><span class="s2">.</span><span class="s1">findAll</span><span class="s2">()).</span><span class="s1">thenReturn</span><span class="s2">(</span><span class="s1">Arrays</span><span class="s2">.</span><span class="s1">asList</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Client</span><span class="s2">()));</span>
+        <span class="s1">mockMvc</span><span class="s2">.</span><span class="s1">perform</span><span class="s2">(</span><span class="s1">get</span><span class="s2">(</span><span class="s3">&quot;/clients&quot;</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">status</span><span class="s2">().</span><span class="s1">isOk</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">jsonPath</span><span class="s2">(</span><span class="s3">&quot;$&quot;</span><span class="s2">).</span><span class="s1">isArray</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s0">public void </span><span class="s1">testGetClientById</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">Client client </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Client</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">, </span><span class="s3">&quot;John Doe&quot;</span><span class="s2">, </span><span class="s4">1234567890L</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s4">100.0f</span><span class="s2">, </span><span class="s4">1000.0f</span><span class="s2">);</span>
+        <span class="s1">when</span><span class="s2">(</span><span class="s1">clientService</span><span class="s2">.</span><span class="s1">findById</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">)).</span><span class="s1">thenReturn</span><span class="s2">(</span><span class="s1">Optional</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s1">mockClient</span><span class="s2">()));</span>
+        <span class="s1">mockMvc</span><span class="s2">.</span><span class="s1">perform</span><span class="s2">(</span><span class="s1">get</span><span class="s2">(</span><span class="s3">&quot;/clients/1&quot;</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">status</span><span class="s2">().</span><span class="s1">isOk</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">jsonPath</span><span class="s2">(</span><span class="s3">&quot;$.id&quot;</span><span class="s2">).</span><span class="s1">value</span><span class="s2">(</span><span class="s1">client</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">jsonPath</span><span class="s2">(</span><span class="s3">&quot;$.nome&quot;</span><span class="s2">).</span><span class="s1">value</span><span class="s2">(</span><span class="s1">client</span><span class="s2">.</span><span class="s1">getNome</span><span class="s2">()));</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s0">public void </span><span class="s1">testCreateClient</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">Client client </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Client</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">, </span><span class="s3">&quot;John Doe&quot;</span><span class="s2">, </span><span class="s4">1234567890L</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s4">100.0f</span><span class="s2">, </span><span class="s4">1000.0f</span><span class="s2">);</span>
+        <span class="s1">when</span><span class="s2">(</span><span class="s1">clientService</span><span class="s2">.</span><span class="s1">save</span><span class="s2">(</span><span class="s1">Mockito</span><span class="s2">.</span><span class="s1">any</span><span class="s2">(</span><span class="s1">Client</span><span class="s2">.</span><span class="s0">class</span><span class="s2">))).</span><span class="s1">thenReturn</span><span class="s2">(</span><span class="s1">client</span><span class="s2">);</span>
+        <span class="s1">mockMvc</span><span class="s2">.</span><span class="s1">perform</span><span class="s2">(</span><span class="s1">post</span><span class="s2">(</span><span class="s3">&quot;/clients&quot;</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">contentType</span><span class="s2">(</span><span class="s1">MediaType</span><span class="s2">.</span><span class="s1">APPLICATION_JSON</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">content</span><span class="s2">(</span><span class="s1">objectMapper</span><span class="s2">.</span><span class="s1">writeValueAsString</span><span class="s2">(</span><span class="s1">client</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">status</span><span class="s2">().</span><span class="s1">isOk</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">jsonPath</span><span class="s2">(</span><span class="s3">&quot;$.nome&quot;</span><span class="s2">).</span><span class="s1">value</span><span class="s2">(</span><span class="s3">&quot;John Doe&quot;</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s0">public void </span><span class="s1">testUpdateClient</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">Client client </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Client</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">, </span><span class="s3">&quot;John Doe&quot;</span><span class="s2">, </span><span class="s4">1234567890L</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s4">100.0f</span><span class="s2">, </span><span class="s4">1000.0f</span><span class="s2">);</span>
+        <span class="s1">when</span><span class="s2">(</span><span class="s1">clientService</span><span class="s2">.</span><span class="s1">findById</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">)).</span><span class="s1">thenReturn</span><span class="s2">(</span><span class="s1">Optional</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s1">client</span><span class="s2">));</span>
+        <span class="s1">when</span><span class="s2">(</span><span class="s1">clientService</span><span class="s2">.</span><span class="s1">save</span><span class="s2">(</span><span class="s1">client</span><span class="s2">)).</span><span class="s1">thenReturn</span><span class="s2">(</span><span class="s1">client</span><span class="s2">);</span>
+        <span class="s1">mockMvc</span><span class="s2">.</span><span class="s1">perform</span><span class="s2">(</span><span class="s1">put</span><span class="s2">(</span><span class="s3">&quot;/clients/1&quot;</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">contentType</span><span class="s2">(</span><span class="s1">MediaType</span><span class="s2">.</span><span class="s1">APPLICATION_JSON</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">content</span><span class="s2">(</span><span class="s1">objectMapper</span><span class="s2">.</span><span class="s1">writeValueAsString</span><span class="s2">(</span><span class="s1">client</span><span class="s2">)))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">status</span><span class="s2">().</span><span class="s1">isOk</span><span class="s2">())</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">jsonPath</span><span class="s2">(</span><span class="s3">&quot;$.nome&quot;</span><span class="s2">).</span><span class="s1">value</span><span class="s2">(</span><span class="s3">&quot;John Doe&quot;</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Test</span>
+    <span class="s0">public void </span><span class="s1">testDeleteClient</span><span class="s2">() </span><span class="s0">throws </span><span class="s1">Exception </span><span class="s2">{</span>
+        <span class="s1">mockMvc</span><span class="s2">.</span><span class="s1">perform</span><span class="s2">(</span><span class="s1">delete</span><span class="s2">(</span><span class="s3">&quot;/clients/1&quot;</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">andExpect</span><span class="s2">(</span><span class="s1">status</span><span class="s2">().</span><span class="s1">isNoContent</span><span class="s2">());</span>
+    <span class="s2">}</span>
+    <span class="s0">private </span><span class="s1">Client mockClient</span><span class="s2">(){</span>
+        <span class="s0">return new </span><span class="s1">Client</span><span class="s2">(</span><span class="s4">1L</span><span class="s2">, </span><span class="s3">&quot;John Doe&quot;</span><span class="s2">, </span><span class="s4">1234567890L</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s4">100.0f</span><span class="s2">, </span><span class="s4">1000.0f</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
